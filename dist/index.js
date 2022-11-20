@@ -23,16 +23,16 @@ function getInfo() {
     prompt([
         {
             type: "input",
-            name: 'name',
-            message: chalk.green("Enter Your name \n")
-        }
-    ]).then(ans => {
+            name: "name",
+            message: chalk.green("Enter Your name \n"),
+        },
+    ]).then((ans) => {
         if (ans["name"] != "") {
             ans["name"] = atm.Name = ans["name"];
             main();
         }
         else {
-            console.log(chalk.redBright(`invalid operation`));
+            console.log(chalk.redBright(`invalid operation\n`));
             getInfo();
         }
     });
@@ -42,32 +42,32 @@ function main() {
         {
             type: "input",
             name: "cardNum",
-            message: chalk.green("Enter your card number here \n")
+            message: chalk.green("Enter your card number here \n"),
         },
         {
             type: "input",
             name: "pin",
-            message: chalk.green("Enter your PIN here \n")
-        }
-    ]).then(ans => {
+            message: chalk.green("Enter your PIN here \n"),
+        },
+    ]).then((ans) => {
         if (ans["cardNum"] != "" && ans["pin"] != "") {
             if (ans["cardNum"] == uniID) {
                 if (parseInt(ans["pin"]) == pass) {
-                    console.log(chalk.greenBright(`Hi! ${atm.Name} successfully logged in`));
+                    console.log(chalk.greenBright(`Welcome ${atm.Name}, you have successfully logged in \n`));
                     actions();
                 }
                 else {
-                    console.log(chalk.redBright(`> invalid pass`));
+                    console.log(chalk.redBright(`> invalid pass \n`));
                     main();
                 }
             }
             else {
-                console.log(chalk.redBright(`> invalid ID`));
+                console.log(chalk.redBright(`> invalid ID\n`));
                 main();
             }
         }
         else {
-            console.log(chalk.redBright(`> invalid operation`));
+            console.log(chalk.redBright(`> invalid operation\n`));
             main();
         }
     });
@@ -77,10 +77,17 @@ function actions() {
         {
             type: "list",
             name: "choice",
-            message: chalk.green("What do you want to do?"),
-            choices: ["Show Balance", "Deposit", "Withdraw", "Send Money", "Transactions", "Quit"]
-        }
-    ]).then(ans => {
+            message: chalk.green("What do you want to do?\n"),
+            choices: [
+                "Show Balance",
+                "Deposit",
+                "Withdraw",
+                "Send Money",
+                "Transactions",
+                "Quit",
+            ],
+        },
+    ]).then((ans) => {
         switch (ans["choice"]) {
             case "Show Balance":
                 atm.showBalance();
@@ -99,7 +106,7 @@ function actions() {
                 transactions();
                 break;
             case "Quit":
-                console.log(chalk.cyanBright(`Take your card, bye!!!`));
+                console.log(chalk.cyanBright(`Take your card, bye!!!\n`));
                 break;
             default:
                 break;
@@ -111,23 +118,23 @@ function deposit() {
         {
             type: "input",
             name: "dpt",
-            message: chalk.green("How many amount you want to deposit? \n")
-        }
-    ]).then(ans => {
+            message: chalk.green("How many amount you want to deposit? \n"),
+        },
+    ]).then((ans) => {
         if (ans["dpt"] != "") {
             let number = isNum(ans["dpt"]);
             if (number) {
-                let amount = parseInt(ans["dpt"]);
+                let amount = parseFloat(ans["dpt"]);
                 atm.deposit(amount);
                 actions();
             }
             else {
-                console.log(chalk.redBright(`> invalid input`));
+                console.log(chalk.redBright(`> invalid input\n`));
                 actions();
             }
         }
         else {
-            console.log(chalk.redBright(`> invalid operation!`));
+            console.log(chalk.redBright(`> invalid operation!\n`));
             actions();
         }
     });
@@ -137,37 +144,40 @@ function withDraw() {
         {
             type: "input",
             name: "wth",
-            message: chalk.green("How much amount you want to withdraw? \n")
-        }
-    ]).then(ans => {
+            message: chalk.green("How much amount you want to withdraw? \n"),
+        },
+    ]).then((ans) => {
         if (ans["wth"] != "") {
             let number = isNum(ans["wth"]);
             if (number) {
-                let amount = parseInt(ans["wth"]);
+                let amount = parseFloat(ans["wth"]);
                 atm.withDraw(amount);
                 actions();
             }
             else {
-                console.log(chalk.redBright(`> invalid input`));
+                console.log(chalk.redBright(`> invalid input\n`));
                 actions();
             }
         }
         else {
-            console.log(chalk.redBright(`> invalid operation!`));
+            console.log(chalk.redBright(`> invalid operation!\n`));
             actions();
         }
     });
 }
 function sendMoney() {
-    prompt([{
+    prompt([
+        {
             type: "input",
             name: "accID",
-            message: chalk.green("Enter account ID of receiver (5 digits) \n")
-        }, {
+            message: chalk.green("Enter account ID of receiver (5 digits) \n"),
+        },
+        {
             type: "input",
             name: "amount",
-            message: chalk.green("Enter amount")
-        }]).then(ans => {
+            message: chalk.green("Enter amount"),
+        },
+    ]).then((ans) => {
         if (ans["accID"] != "" && ans["amount"] != "") {
             if (ans["accID"].length == 5) {
                 let number = isNum(ans["accID"]);
@@ -176,33 +186,39 @@ function sendMoney() {
                     let amnt = isNum(ans["amount"]);
                     let amnot = parseInt(ans["amount"]);
                     if (amnt) {
-                        prompt([{ type: "input", name: "pinagn", message: "Enter Your PIN to confirm" }]).then(ans => {
+                        prompt([
+                            {
+                                type: "input",
+                                name: "pinagn",
+                                message: "Enter Your PIN to confirm\n",
+                            },
+                        ]).then((ans) => {
                             if (ans["pinagn"] == pass) {
                                 atm.sendMoney(amnot, acc);
                                 actions();
                             }
                             else {
-                                console.log(chalk.redBright(`> invalid pin`));
+                                console.log(chalk.redBright(`> invalid pin\n`));
                             }
                         });
                     }
                     else {
-                        console.log(chalk.redBright(`> amount can only be a number`));
+                        console.log(chalk.redBright(`> amount can only be a number\n`));
                         sendMoney();
                     }
                 }
                 else {
-                    console.log(chalk.redBright(`> invalid input`));
+                    console.log(chalk.redBright(`> invalid input\n`));
                     sendMoney();
                 }
             }
             else {
-                console.log(chalk.redBright(`> invalid ID`));
+                console.log(chalk.redBright(`> invalid ID\n`));
                 sendMoney();
             }
         }
         else {
-            console.log(chalk.redBright(`> invalid operation`));
+            console.log(chalk.redBright(`> invalid operation\n`));
             actions();
         }
     });
@@ -216,13 +232,13 @@ function isNum(str) {
     const num2 = !isNaN(num1);
     return num2;
 }
-console.log(chalk.cyan(figlet.textSync('ATMachine', {
-    horizontalLayout: 'default',
-    verticalLayout: 'default',
+console.log(chalk.cyan(figlet.textSync("\t\t ATMachine", {
+    horizontalLayout: "default",
+    verticalLayout: "default",
     width: 80,
-    whitespaceBreak: true
+    whitespaceBreak: true,
 })));
-console.log(chalk.bgYellow(chalk.bold(`> Enter Your credentials to use ATM`)));
+console.log(chalk.bgYellow(chalk.bold(`> Enter Your credentials to use ATM\n`)));
 console.log(chalk.green(`Your CardNumber is ${uniID} and its password is ${pass}`));
 getInfo();
 //# sourceMappingURL=index.js.map
